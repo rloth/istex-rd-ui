@@ -1,0 +1,111 @@
+{% extends "ird_base.html" %}
+
+{% block headers %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>"Mur" de documents</title>
+
+    <style>
+	.panel-body.pdfthumb {
+		width: 100% ;
+		height: 0;
+		overflow: hidden;
+		position: relative ;
+		padding-bottom: 141% ;
+	}
+	
+	iframe.pdfthumb {
+		height: 100%;
+		width:  100%;
+		position: absolute;
+		top: 0 ;
+		left: 0 ;
+	}
+	
+	</style>
+
+
+{% endblock %}
+
+
+{% block contenu_normaux %}
+
+	<div class="container">
+		<div class="page-header">
+			<h1>"Mur" de documents</h1>
+			<p class="lead">Affiche des PDFs de l'API et bientôt des XML</p>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">ID</h3>
+					</div>
+					<div class="panel-body pdfthumb">
+						<iframe src="https://api.istex.fr/document/E6D05AD55D65A30CDC7320A8739C59F17C73CDB4/fulltext/pdf#view=FitH" class="pdfthumb" frameborder="0" scrolling="no">
+							<p>Your web browser doesn't support iframes.</p>
+					   </iframe>
+					</div>
+					<div class="panel-heading-default">
+						<h3 class="panel-title">Options</h3>
+						<p>
+							<a href="https://api.istex.fr/document/E6D05AD55D65A30CDC7320A8739C59F17C73CDB4/fulltext/pdf">document original</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">ID</h3>
+					</div>
+					<div class="panel-body pdfthumb">
+						<iframe src="https://api.istex.fr/document/B74A0C52AE711848427D29215A767D67A81BD029/fulltext/pdf#view=FitH" class="pdfthumb" frameborder="0" scrolling="no">
+							<p>Your web browser doesn't support iframes.</p>
+					   </iframe>
+					</div>
+					<div class="panel-heading-default">
+						<h3 class="panel-title">Options</h3>
+						<p>
+							<a href="https://api.istex.fr/document/B74A0C52AE711848427D29215A767D67A81BD029/fulltext/pdf">document original</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">ID</h3>
+					</div>
+					<div class="panel-body pdfthumb">
+						<iframe src="https://api.istex.fr/document/E0E425AF76B2D4588353ED05D3437AFF4B22E5CC/fulltext/pdf#view=FitH" class="pdfthumb" frameborder="0" scrolling="no">
+							<p>Your web browser doesn't support iframes.</p>
+					   </iframe>
+					</div>
+					<div class="panel-heading-default">
+						<h3 class="panel-title">Options</h3>
+						<p>
+							<a href="https://api.istex.fr/document/E0E425AF76B2D4588353ED05D3437AFF4B22E5CC/fulltext/pdf">document original</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="panel panel-danger">
+					<div class="panel-heading">
+						<h3 class="panel-title">Autre panel</h3>
+					</div>
+					<div class="panel-body">
+						<p>hello</p>
+						<p>hello</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

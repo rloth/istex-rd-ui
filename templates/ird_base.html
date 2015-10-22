@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr-fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- FEUILLE CSS BOOTSTRAP -->
+  <link href="static/css/bootstrap.css" rel="stylesheet">
+
+  <!-- NOTRE FEUILLE CSS PRINCIPALE -->
+  <link href="static/css/istex_rd_base.css" rel="stylesheet" type='text/css'>
+
+  <!-- 3RD PARTY JS
+    (non utilisés mais probablement utiles un jour)
+    script src="static/js/jquery-2.1.4.js" type="text/javascript"></script>
+    <script src="static/js/bootstrap.js" type="text/javascript"></script>
+  -->
+
+  <!--
+    SOUS-BLOC "headers" à utiliser dans les template filles
+     (pour y placer les headers supplémentaires)
+     (notamment title et imports+ si besoin est)
+  -->
+  {% block headers %} {% endblock %}
+
+  <!-- ^-^ -->
+  <link rel="shortcut icon" href="static/favicon.ico">
+</head>
+
+<body>
+
+
+  <!-- **********************************************************************
+    haut de la page     les infos préalables, remarques importantes
+                        belles visualisations one shote  etc
+  │ ╠════════════╣ │
+  │x║  diapos    ║x│         \
+  │x║    ou      ║x│           > {block a_la_une}:
+  │x║    autres  ║x│         /
+  │ ╠════════════╣ │
+  │ ║            ║ │
+  │ ║  ici enfin ║ │     suite {contenus_normaux}
+
+  -->
+{% block a_la_une %} {% endblock %}
+
+
+
+  <!-- **********************************************************************
+  │ ║    autres  ║ │   fin {block a_la_une}
+  │ ╠════════════╣ │
+  │x║            ║x│        \
+  │x║  ici enfin ║x│         \
+  │x║    les     ║x│           > {contenus_normaux}
+  │x║  contenus  ║x│         /
+  │x║            ║x│        /
+  │ ╠════════════╣ │
+  │ ║ <footer /> ║ │
+  │ ║            ║ │    puis fin de page
+
+  -->
+{% block contenu_normaux %} {% endblock %}
+
+
+
+  <!-- **********************************************************************
+       FOOTER -->
+
+
+<!-- WARNINGS -->
+{% if messages %}
+  <div class="alert alert-warning meswarnings">
+    <h1>MESSAGES:</h1>
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+
+  <!-- ***********************************************
+  ┌───╥────────────┐
+  │nom║   navbar   │       top of page : barre de menus <li>
+  │════════════════│
+  -->
+
+  <div class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+	<div class="navbar-header"><a class="navbar-brand">sampler.libweb</a></div>
+		<ul class="nav navbar-nav">
+		  <li{% if page_active == "accueil" %} class="active"{% endif %}>
+			<a href="/"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;
+			  accueil (>eval)
+			</a>
+		  </li>
+		  <li{% if page_active == "evaluation_docs" %} class="active"{% endif %}>
+			<a href="/evaluation_docs"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;
+			  ls
+			</a>
+		  </li>
+<!--
+		  <li class="dropdown{% if page_active == "corpora" %} active{% endif %}">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			  <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Artistes
+			  <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+			  {% for corpus in corpora %}
+				<li><a href="/corpora/{{ corpus.name }}/">{{ corpus.name }}</a></li>
+			  {% endfor %}
+			</ul>
+		  </li>
+-->
+		  <li{% if page_active == "evaluation_findout" %} class="active"{% endif %}>
+			<a href="/evaluation_findout"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;
+			  evaluation
+			</a>
+		  </li>
+		  <li{% if page_active == "exemplier" %} class="active"{% endif %}>
+			<a href="/exemplier"><span class="glyphicon glyphicon-briefcase"></span>&nbsp;&nbsp;
+			  exemplier
+			</a>
+		  </li>
+		  <li{% if page_active == "treemap" %} class="active"{% endif %}>
+			<a href="/treemap"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;
+			  essai treemap d3.js
+			</a>
+		  </li>
+		</ul>
+
+  </div>
+
+
+
+
+
+<!--
+  <footer>
+    <div class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="container">
+        <p class="navbar-text">
+          &copy; 2014-2015
+        </p>
+        <p class="navbar-text pull-right">par
+          <a href="http://www.purl.org/net/romainloth">Romain Loth</a>
+        </p>
+        <p class="navbar-text pull-right">
+          <span class="glyphicon glyphicon-warning-sign"></span>
+          Version de test
+          <span class="glyphicon glyphicon-warning-sign"></span>
+        </p>
+      </div>
+    </div>
+  </footer>
+-->
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+{
+ "name": "istex_sampler_quotas",
+ "children": [
+  {
+   "name": "els",
+   "children": [
+    {
+     "name": "bibs",
+     "size": 3624415
+    },
+    {
+     "name": "sans",
+     "size": 2391518
+    }
+   ]
+  },
+  {
+   "name": "wly",
+   "children": [
+    {
+     "name": "bibs",
+     "size": 3243348
+    },
+    {
+     "name": "sans",
+     "size": 1418918
+    }
+   ]
+  },
+  {
+   "name": "sge",
+   "children": [
+    {
+     "name": "bibs",
+     "size": 410978
+    },
+    {
+     "name": "sans",
+     "size": 385936
+    }
+   ]
+  },
+  {
+   "name": "oup",
+   "children": [
+    {
+     "name": "bibs",
+     "size": 174380
+    },
+    {
+     "name": "sans",
+     "size": 1370223
+    }
+   ]
+  },
+  {
+   "name": "nat",
+   "children": [
+    {
+     "name": "bibs",
+     "size": 126547
+    },
+    {
+     "name": "sans",
+     "size": 281585
+    }
+   ]
+  },
+  {
+   "name": "bmj",
+   "children": [
+    {
+     "name": "bibs",
+     "size": 128356
+    },
+    {
+     "name": "sans",
+     "size": 558454
+    }
+   ]
+  },
+  {
+   "name": "iop",
+   "children": [
+    {
+     "name": "bibs",
+     "size": 85334
+    },
+    {
+     "name": "sans",
+     "size": 431648
+    }
+   ]
+  },
+  {
+   "name": "rsc",
+   "children": [
+    {
+     "name": "bibs",
+     "size": 29554
+    },
+    {
+     "name": "sans",
+     "size": 229324
+    }
+   ]
+  },
+  {
+   "name": "spg",
+   "children": [
+    {
+     "name": "sans",
+     "size": 2304574
+    }
+   ]
+  }
+ ]
+}

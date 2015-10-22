@@ -1,0 +1,66 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Body, typos et navbar de page_base.html  ------ */
+
+
+body {
+  background-color: #E9E9E9;
+  font-size:2em;
+}
+
+/* pour que la navbar soit dans le padding */
+@media (min-width: 768px) { body { padding-top: 95px; } }
+@media (max-width: 767px) { body { padding-top: 50px; } }
+
+
+/* navigation */
+.nav-pills > * {
+  font-weight: bold;
+}
+
+.nav-pills .disabled {
+  color:grey;
+}
+
+/* typographie */
+h1,h2,h3 {
+  font-family: Calibri, sans;
+  font-weight: bold;
+}
+
+p {
+  font-family: Cambria, serif ;
+}
+
+h1 {
+  letter-spacing:0.1em ;
+  color: #A02528 ;
+}
+
+
+/*  - - - - - - - Pour DEBUG et phase développement - - - - -  */
+
+.meswarnings {
+  color : #A02528;
+  font-weight: bold;
+  font-size: 12pt;
+  border-bottom: 10px dashed #A02528;
+}
+
+.meswarnings > p {
+  font-family: monospace ;
+}
+
+
+
+
+/* > override bootstrap.css à .navbar */
+.navbar-fixed-bottom {
+
+  height: 2em !important;
+}
+
+.navbar-fixed-bottom * {
+  font-weight: bold;
+  font-size: 12pt;
+}

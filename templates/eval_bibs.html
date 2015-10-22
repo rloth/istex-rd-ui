@@ -1,0 +1,204 @@
+{% extends "ird_base.html" %}
+
+{% block headers %}
+
+<title>bib-findout-api : Liste de bibs à évaluer</title>
+<link href="static/css/tei.test.css" rel="stylesheet" type='text/css'>
+<style>
+/* un joli header rouge pour chaque bib */
+.bibheader {
+  color:#A02528;
+  font-family: Calibri, sans;
+  font-weight: bold;
+  border-top: 5px solid black;
+  margin: 10px 0 0 0;
+}
+
+/* contient la biblStruct */
+div#bibsource {
+  background-color: #FFFFA5 ;
+  box-shadow: 2px 3px 0px black;
+  border-radius: 0.3em;
+  font-size: 75%;
+}
+
+/*BIBLSTRUCT importée du xml - - - - - - - - - - - - - -
+  (cf. aussi tei.test.css obtenue via
+       github.com/Inist-CNRS/prettyTEI/tree/romain)
+ */
+
+/* (1) on veut être certain de tout afficher */
+ biblStruct * { color: black; font-size: 1em; }
+
+/* (2) marqueur interne à la bibl */
+biblStruct { border: 1px dashed grey; }
+
+/* (3) PERMET DE PREEMPTER
+   LES REGLES DE NAVIGATEUR
+   QUI ONT title {display:none}
+   (CAR ILS ONT PREVU POUR LES TITRES DE PAGES HTML)
+ */
+biblStruct title { display: block !important; }
+/*- - - - - - -  - - - - - - - - - - - - - - - - - - */
+
+
+/* zone des questions/réponses scrollable  - - - - - */
+fieldset {
+  overflow-y: scroll;
+  max-height: 700px;
+  width: 100%;
+}
+
+div.row.resultats {
+  margin: 10px 0 10px 0;
+  border-top: 1px solid grey;
+}
+
+div.element.mon_q {
+  margin: 15px 0 0 0
+}
+
+/*deux classes pour mettre
+  en forme les réponses
+*/
+.minihit {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color:#3299BB;
+}
+.nohit {
+  margin-top: 75px;
+  margin-bottom: 75px;
+  height: 150px;
+  width: 100%;
+  background-color:grey;
+}
+
+/* une transfo pour augmenter
+   la taille des case à cocher
+*/
+input[type=checkbox] {
+  /* src: stackoverflow.com/questions/306924 */
+  /* All browsers except webkit*/
+  transform: scale(1.7);
+  /* Webkit browsers*/
+  -webkit-transform: scale(1.7);
+  margin: 10px;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - */
+</style>
+
+
+{% endblock %}
+
+
+{% block a_la_une %}
+
+<p id="top" style="margin:500 0 0 0">
+  ...<!--ici bandeau istex ?-->
+</p>
+
+<h2 align="center">Évaluation document {{did}}</h2>
+
+{% endblock %}
+
+
+{% block contenu_normaux %}
+
+<div class="container" style="padding: 0 20 0 20">
+  <form action="{{request.path}}" method="POST">
+
+    <!-- pour savoir quel doc on traite -->
+    <input type="hidden" name="doc_id" value="{{did}}">
+
+
+    {% for refbib in refbibs %}
+
+    <legend class="bibheader">
+      bib extraite {{refbib.bib_id}}
+    </legend>
+
+    <div class="row">
+      <div class="element col-sm-9" id="bibsource">
+        <p>
+          {{refbib.bib_html | safe}}
+        </p>
+      </div>
+      <div class="col-sm-3">
+        {% for err in refbib.findout_errs %}
+        <div class="meswarnings">
+          <p>{{err}}</p>
+        </div>
+        {% endfor %}
+        <div>
+          <h4>
+            <a href="https://api.istex.fr/document/{{refbib.parent_doc}}/fulltext/pdf" target="_blank">Ouvrir le doc PDF</a>
+          </h4>
+        </div>
+      </div>
+    </div><!-- fin row interne 1 -->
+
+    <fieldset>
+      {% for qa in refbib.solved_qs %}
+      {% set qid=did~".bib"~refbib.bib_id~".qmeth"~loop.index %}
+      {% set small_qid=".bib"~refbib.bib_id~".qmeth"~loop.index %}
+      <div class="row resultats">
+        <div>
+          <div class="element col-sm-8">
+            {% if qa.json_answr is mapping %}
+            <div class="minihit">
+              <h4>{{ qa.json_answr.title }}</h4>
+
+              <p>
+                {% for au in qa.json_answr.author %}{{au.name}}, {% endfor %}
+                <b>[{{qa.json_answr.publicationDate}}]</b>
+              </p>
+
+              <p>
+                istex-id: {{ qa.json_answr.id }}
+              </p>
+              <p>
+                DOI: {{ qa.json_answr['doi'] }}
+              </p>
+              <small>
+                l'original:<br>
+                {{qa.json_answr}}
+              </small>
+            </div>
+            {% else %}
+            <div class="nohit">
+              <h4>Pas de match renvoyé</h4>
+            </div>
+            {% endif %}
+
+          </div>
+          <div class="element col-sm-4 mon_q">
+            <code>{{small_qid}}</code>
+            <!-- ICI INPUT -->
+            <input name="{{qid}}" type="checkbox" />
+            <label for="{{qid}}">résultat ok ?</label>
+            <!-- rappel requête -->
+            <h4>méthode {{loop.index}}</h4>
+            <small>
+              Q={{qa.lucn_query}}
+            </small>
+          </div>
+        </div>
+      </div><!-- fin row interne 2 -->
+      {% endfor %}
+    </fieldset>
+    {% endfor %}
+
+    <div>
+      <div class="element col-sm-8"></div>
+      <div class="element col-sm-4">
+        <input type="submit" value="Sauvegarder">
+      </div>
+    </div>
+  </form>
+</div>
+<p style="margin: 0 0 200 0">&nbsp;</p>
+{% endblock %}

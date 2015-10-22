@@ -1,0 +1,55 @@
+{% extends "ird_base.html" %}
+
+{% block headers %}
+
+<title>bib-findout-api : Catalogue de documents préparés pour l'évaluation</title>
+
+<style>
+h4.done {
+  text-decoration: line-through;
+  margin-bottom:0;
+}
+h4.todo {
+  /*a priori pas nécessaire de signaler*/
+  margin-bottom:0;
+}
+</style>
+
+{% endblock %}
+
+
+{% block a_la_une %}
+
+<p id="top" style="margin:500 0 0 0">
+  ...<!--ici bandeau istex ?-->
+</p>
+
+<h2 align="center">Documents à évaluer</h2>
+
+{% endblock %}
+
+
+{% block contenu_normaux %}
+
+<div class="container" style="padding: 0 20 0 20">
+
+    <div class="row">
+      <div class="element col-sm-3">&nbsp;</div>
+      <div class="element col-sm-9">
+        {% for a_doc in recette_docs %}
+        <h4 class="{{ 'done' if a_doc.ok else 'todo' }}">
+          <a href="/evaluation_findout?docname={{a_doc.name}}">{{a_doc.name}}</a>
+        </h4>
+        <p style="border-bottom: 2px dashed black; text-align:right;">
+          <small>
+          Ouvrir le doc <a href="https://api.istex.fr/document/{{a_doc.name}}/fulltext/pdf" target="_blank">PDF</a>
+          </small>
+        </p>
+        {% endfor %}
+      </div>
+      <div class="element col-sm-3">&nbsp;</div>
+    </div>
+
+</div>
+<p style="margin: 0 0 200 0">&nbsp;</p>
+{% endblock %}

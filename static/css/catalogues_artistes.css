@@ -1,0 +1,129 @@
+
+/* mes Thumbnails
+-------------------------------------------------- */
+/* - - le conteneur d'ensemble - - */
+div.thumbs-row {
+  background-color:#194854 ;
+}
+
+@media (min-width: 768px) { div.thumbs-row { border-radius: 4px; } }
+
+
+/* - chaque thumb = élément div ==> cadre qui contiendra ( image + légende) */
+div.thumbnail { 
+  height: auto ;             /* hauteur libre selon ratio et */
+  max-width: 90% ;           /* ! aère les thumbs par rapport cols parentes */
+  padding: 1em 0 1em 0;      /* padding haut bas */
+  background-color: inherit;
+  border: white;             /* none ici et précédent inherit: invis */
+}
+
+
+/* - image proprement dite ou image dans un lien */
+.thumbnail > a,img { 
+  box-shadow: 4px 7px 2px black !important;
+  border-radius: 0.3em !important;
+}
+
+/* - légende */
+.thumbnail > .caption { 
+  padding: 0 1em .5em 1em ;     /* padding droite bas et gauche */
+  background-color: orange ; /* crème */ /* couvert par une texture papier inline */
+  box-shadow: 4px 7px 2px black;
+  border-radius: 0.3em;
+}
+
+.thumbnail > .caption > h3 {
+  color: #222222 ;
+  font-weight: bold;
+}
+
+@media (min-width: 768px) { 
+  .thumbnail > .caption > h3 { font-size: 1.4em; } 
+  .thumbnail > .caption > p { font-size: 0.9em; } 
+}
+
+
+/* - un thumbnail complètement particulier : la plaquette biographie 
+     elle n'a pas de fond, ne contient pas de caption, juste là direct*/
+div.thumbnail.biothumb {
+  max-width : 100%;          /* on override le 90% des autres thumbs */
+  margin: 0em 0em 1em 0em ;      /* marge bas */
+  max-height: 23em ;
+  min-height: 12em ;
+  color: #FFF2C1;
+  font-size: 1.3em;
+}
+
+/* Nom de l'artiste */
+.biothumb > h2 {
+  color: white;   /* ou #999999 */
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* paragraphe du texte biographique */
+.biothumb > .biop {
+  background-color: inherit ;
+  max-height: 15em ;
+  padding: 0.5em 2em 0.5em 0em ;     /* padding haut, droite, bas */
+  overflow-y: auto ;
+  overflow-x: hidden ;
+  color: #D0D0D0 ;
+  font-size: 16pt; 
+}
+
+
+/* Pour Isotope (classement de diapos)
+-------------------------------------------------- */
+/**** Isotope Filtering ****/
+
+.isotope-item {
+  z-index: 2;
+}
+
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+
+/**** Isotope CSS3 transitions ****/
+
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:      -o-transform, opacity;
+          transition-property:         transform, opacity;
+}
+
+/**** disabling Isotope CSS3 transitions ****/
+
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+     -moz-transition-duration: 0s;
+      -ms-transition-duration: 0s;
+       -o-transition-duration: 0s;
+          transition-duration: 0s;
+}
+
+/* End: Recommended Isotope styles */

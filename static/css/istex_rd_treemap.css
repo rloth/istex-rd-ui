@@ -1,3 +1,9 @@
+body {
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
 div.node {
   border: solid 1px #E9E9E9;
   overflow: hidden;
@@ -6,12 +12,13 @@ div.node {
 
 /* porteront les noms des groupes et les couleurs */
 div.nonterm {
+  font-family: Calibri, sans-serif;
   text-align: right ;
   font-style: italic ;
-  font-size: 3em;
+  font-size: 1em;
 }
 
-/* 4 spaces for pseudo negative text indent */
+/* 4 espaces après le label pour imiter margin-right */
 div.nonterm::after {
   content: "\a0\a0\a0\a0";
 }
@@ -21,7 +28,7 @@ div.terminal {
   text-align: left ;
   text-indent: 2px;
   font-style: normal ;
-  font-size: 1em;
+  font-size: .5em;
 }
 
 /* labels des cases */

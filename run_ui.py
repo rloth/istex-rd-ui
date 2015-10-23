@@ -30,8 +30,8 @@ with open(path.join(script_dir,'ui.config')) as f:
 
 
 
-# -----------------------------------------------------------------------------
-# prépa des fichiers d'évaluations + marqueur NEXT : prochain doc à traiter
+# -----------------------------------------------------------------------------------
+# prépa des fichiers d'évaluations + "next" : prochain doc à traiter via get_first
 # recette / resultats de l'évaluation de résolution
 RECETTE_DIR = CONF['evaluation_findout']['fixture_dir']         # requêtes testées
 EVALDONE_DIR = CONF['evaluation_findout']['eval_results_dir']   # évaluations des requêtes testées
@@ -43,7 +43,7 @@ def my_bname(a_path):
 	"""
 	return sub("\.test_resolution\.json$|\.fo_evals\.tsv$","" ,path.basename(a_path))
 
-# pour re-vérifier les dossiers
+# pour re-vérifier les dossiers lorsqu'on lance get_first_remaining
 def recheck_todo_ids():
 	return [my_bname(fi) for fi in listdir(RECETTE_DIR)]
 
@@ -60,11 +60,14 @@ def get_first_remaining(todo_files, done_files):
 	Donne la première recette qui n'apparait pas dans les done_files
 	"""
 	if not len(done_files):
+		# si aucun done
 		return(todo_files[0])
 	else:
 		for rid in todo_files:
 			if rid not in done_files:
 				return rid
+		# si tous done
+		return None
 # -----------------------------------------------------------------------------
 
 

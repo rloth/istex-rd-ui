@@ -68,6 +68,12 @@ div.element.mon_q {
   overflow-y: hidden;
   background-color:#3299BB;
 }
+
+.minihit.validated {
+  background-color: #FFFFA5;
+  border-top: 3px dashed green;
+}
+
 .nohit {
   margin-top: 75px;
   margin-bottom: 75px;
@@ -149,7 +155,11 @@ input[type=checkbox] {
         <div>
           <div class="element col-sm-8">
             {% if qa.json_answr is mapping %}
+            {% if qa.match_flag %}
+            <div class="minihit validated">
+            {% else %}
             <div class="minihit">
+            {% endif %}
               <h4>{{ qa.json_answr.title }}</h4>
 
               <p>

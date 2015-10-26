@@ -239,6 +239,12 @@ def www_showcase():
 def www_treemapbig():
 	return render_template('treemap.html', page_active="treemap")
 
+
+@mon_app.route('/navi_graph')
+def www_navigraph():
+	return render_template('navi_graph.html', page_active="navi_graph")
+
+
 @mon_app.route('/ls')
 def www_ls():
 	hello_str = "<h3>hello</h3><br/>"

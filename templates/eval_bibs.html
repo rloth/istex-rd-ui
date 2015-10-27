@@ -4,20 +4,23 @@
 
 <title>bib-findout-api : Liste de bibs à évaluer</title>
 <link href="static/css/tei.test.css" rel="stylesheet" type='text/css'>
+
+<script src="static/js/jquery-2.1.4.js"></script>
+
 <style>
 /* un joli header rouge pour chaque bib */
 .bibheader {
-color:#A02528;
-font-family: Calibri, sans;
-font-weight: bold;
+  color:#A02528;
+  font-family: Calibri, sans;
+  font-weight: bold;
 }
 
 /* contient la biblStruct */
-div#bibsource {
-background-color: #FFFFA5 ;
-box-shadow: 2px 3px 0px black;
-border-radius: 0.3em;
-font-size: 75%;
+div.bibsource {
+  background-color: #FFFFA5 ;
+  box-shadow: 2px 3px 0px black;
+  border-radius: 0.3em;
+  font-size: 75%;
 }
 
 /*BIBLSTRUCT importée du xml - - - - - - - - - - - - - -
@@ -43,65 +46,76 @@ biblStruct title { display: block !important; }
 /* zone des questions/réponses scrollable  - - - - - */
 
 div.row.together {
-margin: 90px 0 30px 0;
-border-top: 4px solid black;
-background-color:white;
+  margin: 90px 0 30px 0;
+  border-top: 4px solid black;
+  background-color:white;
 }
 
 
 div.row.source {
-margin: 10px 0 10px 0;
+  margin: 10px 0 10px 0;
 }
 
 fieldset {
-overflow-y: scroll;
-max-height: 700px;
-width: 100%;
+  overflow-y: scroll;
+  max-height: 700px;
+  width: 100%;
 }
 
+
+p.tei-styled {
+  display: block;
+}
+
+p.tei-raw {
+  display: none;
+  font-size: 85%;
+}
+
+
 div.row.resultats {
-margin: 10px 0 10px 0;
-border-top: 1px solid grey;
+  margin: 10px 0 10px 0;
+  border-top: 1px solid grey;
 }
 
 div.element.mon_q {
-margin: 15px 0 0 0
+  margin: 15px 0 0 0
 }
 
 /*deux classes pour mettre
 en forme les réponses
 */
 .minihit {
-height: 100%;
-width: 100%;
-overflow-x: hidden;
-overflow-y: hidden;
-/*background-color:#3299BB;*/
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  /*background-color:#3299BB;*/
 }
 
 .minihit.validated {
-background-color: #659D32;
-border-top: 3px dashed #659D32;
+  background-color: #659D32;
+  border-top: 3px dashed #659D32;
 }
 
 .nohit {
-margin-top: 75px;
-margin-bottom: 75px;
-height: 150px;
-width: 100%;
-background-color:grey;
+  margin-top: 75px;
+  margin-bottom: 75px;
+  height: 150px;
+  width: 100%;
+  background-color:grey;
 }
 
 /* une transfo pour augmenter
 la taille des case à cocher
 */
 input[type=checkbox] {
-/* src: stackoverflow.com/questions/306924 */
-/* All browsers except webkit*/
-transform: scale(1.7);
-/* Webkit browsers*/
--webkit-transform: scale(1.7);
-margin: 10px;
+  /* src: stackoverflow.com/questions/306924 */
+  /* All browsers except webkit*/
+  transform: scale(1.7);
+  /* Webkit browsers*/
+  -webkit-transform: scale(1.7);
+  margin: 10px;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - */
@@ -114,7 +128,7 @@ margin: 10px;
 {% block a_la_une %}
 
 <p id="top" style="margin:500 0 0 0">
-...<!--ici bandeau istex ?-->
+  ...<!--ici bandeau istex ?-->
 </p>
 
 <h2 align="center">Évaluation document {{did}}</h2>
@@ -125,25 +139,36 @@ margin: 10px;
 {% block contenu_normaux %}
 
 <div class="container" style="padding: 0 20 0 20">
-<form action="{{request.path}}" method="POST">
+  <form action="{{request.path}}" method="POST" name="eval" id="eval">
 
-  <!-- pour savoir quel doc on traite -->
-  <input type="hidden" name="doc_id" value="{{did}}">
-
-
-  {% for refbib in refbibs %}
-
-  <div class="row together">
-
-    <legend class="bibheader">
-      bib extraite {{refbib.bib_id}}
-    </legend>
-    <div class="row source">
-      <div class="element col-sm-9" id="bibsource">
+    <!-- pour savoir quel doc on traite -->
+    <input type="hidden" name="doc_id" value="{{did}}">
 
 
-        <p>
+    {% for refbib in refbibs %}
+
+    <div class="row together" id="{{refbib.bib_id}}">
+
+      <legend class="bibheader">
+        bib extraite {{refbib.bib_id}}
+      </legend>
+      <div class="source row">
+        <div class="bibsource element col-sm-9">
+          <p style="font-family:monospace">
+            <small>
+              <a href="#bib-{{refbib.bib_id}}"
+              class="tei-toggle"
+              title="brut <=> mis en page">
+              <span class="glyphicon glyphicon-transfer"></span>
+            </a>
+            tei:biblStruct
+          </small>
+        </p>
+        <p class="tei-styled" id="{{refbib.bib_id}}-tei-styled">
           {{refbib.bib_html | safe}}
+        </p>
+        <p class="tei-raw" id="{{refbib.bib_id}}-tei-raw">
+          {{refbib.bib_html}}
         </p>
       </div>
       <div class="col-sm-3">
@@ -153,66 +178,81 @@ margin: 10px;
         </div>
         {% endfor %}
         <div>
-          <h4>
-            <a href="https://api.istex.fr/document/{{refbib.parent_doc}}/fulltext/pdf" target="_blank">Ouvrir le doc PDF</a>
-          </h4>
+          <p>
+            <small>Remarques</small>
+            <textarea name="{{refbib.bib_id}}-remarques" form="eval" class="form-control" rows="3" cols="25"></textarea>
+          </p>
+          <p>
+            <small>
+              <a href="https://api.istex.fr/document/{{refbib.parent_doc}}/fulltext/pdf" target="_blank">
+                Réouvrir le PDF
+              </a>
+              </small
+            </p>
+            <p>
+              <small>
+                <a href="#{{refbib.bib_id}}" title="caler">
+                  Caler en haut de page
+                </a>
+              </small>
+            </p>
+          </div>
         </div>
-      </div>
-    </div><!-- fin row interne 1 -->
+      </div><!-- fin row interne 1 -->
 
-    <fieldset>
-      {% for qa in refbib.solved_qs %}
-      {% set qid=did~".bib"~refbib.bib_id~".qmeth"~loop.index %}
-      {% set small_qid=".bib"~refbib.bib_id~".qmeth"~loop.index %}
-      <div class="row resultats">
-        <div>
-          <div class="element col-sm-8">
-            {% if qa.json_answr is mapping %}
-            {% if qa.match_flag %}
-            <div class="minihit validated">
-              {% else %}
-              <div class="minihit">
-                {% endif %}
-                <!-- HIT: auteurs + date -->
-                <p>
-                  {% for au in qa.json_answr.author %}{{au.name}}, {% endfor %}
-                  <b>{{qa.json_answr.publicationDate}}</b>
-                </p>
+      <fieldset>
+        {% for qa in refbib.solved_qs %}
+        {% set qid=did~".bib"~refbib.bib_id~".qmeth"~loop.index %}
+        {% set small_qid=".bib"~refbib.bib_id~".qmeth"~loop.index %}
+        <div class="row resultats">
+          <div>
+            <div class="element col-sm-8">
+              {% if qa.json_answr is mapping %}
+              {% if qa.match_flag %}
+              <div class="minihit validated">
+                {% else %}
+                <div class="minihit">
+                  {% endif %}
+                  <!-- HIT: auteurs + date -->
+                  <p>
+                    {% for au in qa.json_answr.author %}{{au.name}}, {% endfor %}
+                    <b>{{qa.json_answr.publicationDate}}</b>
+                  </p>
 
-                <!-- HIT: revue + volume + page -->
-                <p>
-                  j:<i>{{ qa.json_answr.host.title }}</i>,
-                  vol: {{ qa.json_answr.host.volume }},
-                  p: {{ qa.json_answr.host.pages.first }}
-                </p>
+                  <!-- HIT: revue + volume + page -->
+                  <p>
+                    j:<i>{{ qa.json_answr.host.title }}</i>,
+                    vol: {{ qa.json_answr.host.volume }},
+                    p: {{ qa.json_answr.host.pages.first }}
+                  </p>
 
-                <!-- HIT: titre -->
-                <h4>{{ qa.json_answr.title }}</h4>
+                  <!-- HIT: titre -->
+                  <h4>{{ qa.json_answr.title }}</h4>
 
-                <p>
+                  <p>
+                    <small>
+                      istex: (<b>{{ qa.json_answr.corpusName }}</b>)
+                      <a href="https://api.istex.fr/document/{{ qa.json_answr.id }}/">
+                        {{ qa.json_answr.id }}
+                      </a>
+                    </small>
+                  </p>
+                  <p>
+                    <small>
+                      DOI:
+                      <a href="https://dx.doi.org/{{ qa.json_answr['doi'][0] }}">
+                        {{ qa.json_answr['doi'][0] }}
+                      </a>
+                    </small>
+                  </p>
+
+                  <!-- HIT: autres infos -->
+                  <!--
                   <small>
-                    istex: (<b>{{ qa.json_answr.corpusName }}</b>)
-                    <a href="https://api.istex.fr/document/{{ qa.json_answr.id }}/">
-                      {{ qa.json_answr.id }}
-                    </a>
-                  </small>
-                </p>
-                <p>
-                  <small>
-                    DOI:
-                    <a href="https://dx.doi.org/{{ qa.json_answr['doi'][0] }}">
-                      {{ qa.json_answr['doi'][0] }}
-                    </a>
-                  </small>
-                </p>
-
-                <!-- HIT: autres infos -->
-                <!--
-                <small>
                   l'original:<br>
                   {{qa.json_answr}}
                 </small>
-                -->
+              -->
             </div>
             {% else %}
             <div class="nohit">
@@ -249,4 +289,14 @@ margin: 10px;
 </form>
 </div>
 <p style="margin: 0 0 200 0">&nbsp;</p>
+
+<script type="text/javascript">
+$("a.tei-toggle").click(function() {
+  // tgt_id contient déjà le # initial
+  var tgt_id = $(this).attr("href")
+  $("p"+tgt_id+"-tei-styled").toggle()
+  $("p"+tgt_id+"-tei-raw").toggle()
+})
+</script>
+
 {% endblock %}

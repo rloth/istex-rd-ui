@@ -5,8 +5,8 @@ todo
 les dossiers de Corpus de libconsulte et les pools du sampler
 """
 from flask import Flask, render_template, request, redirect
-from os import listdir, path
-from re import sub, MULTILINE
+from os import listdir, path, mkdir
+from re import sub, MULTILINE, search
 from json import load
 from subprocess import check_output
 from configparser import ConfigParser
@@ -159,20 +159,36 @@ def www_eval_fo_post():
 	# debug
 	# return("<p>everything:%s</p><p>req:%s</p>" % (str([(k,request.form[k]) for k in request.form]),dir(request),))
 	
-	# on re-charge grace au champ 'doc_id' du formulaire
+	# préparation dossier
+	if not path.isdir(EVALDONE_DIR):
+		mkdir(EVALDONE_DIR)
+	
+	# identifiant du document caché dans le formulaire -------
 	did = request.form['doc_id']
+	
+	# sauvegarde des remarques à part ------------------------
+	remarques_lines = []
+	for k in request.form:
+		if search('remarques$',k) and len(request.form[k]):
+			# 2 lignes id ex: "#b1-remarques:" + soulignement
+			remarques_lines += ['#' + k + ":", "---------------"]
+			# contenu de la remarque (texte libre + saut ligne vide)
+			remarques_lines += [request.form[k],'']
+	
+	log_remarques = open(path.join(EVALDONE_DIR, did+".remarques.txt"), "w")
+	log_remarques.write("\n".join(remarques_lines)+"\n")
+	log_remarques.close()
+	
+	# sauvegarde pour les évaluations proprement dites -------
+	# (1) on re-charge grace au champ 'doc_id' du formulaire
 	recette_doc = path.join(RECETTE_DIR, did+".test_resolution.json")
 	recette = open(recette_doc, "r")
 	bibinfos = load(recette)
 	recette.close
-	
 	# ... afin d'avoir les bon ids
 	
-	
-	# on parcourt en écrivant un fichier pour ce doc
-	
+	# (2) on parcourt en écrivant un fichier pour ce doc
 	header = 'bib_id\tq0\tq1\tq2\tq3\tq4\tq5\tq6\tq7'
-	
 	output_lines = [header]
 	
 	for bibinfo in bibinfos:
@@ -185,13 +201,14 @@ def www_eval_fo_post():
 		
 		this_line = [bid]
 		
+		# on va faire une colonne par requête
+		# => on veut qu'il y en ait toujours le même nombre
 		n_q = len(bibinfo['solved_qs'])
 		
 		if n_q != 8:
 			# raise TypeError("nombre de requêtes: %i != 8" % n_q)
 			print("(skip):%s" % bibinfo['findout_errs'])
 			continue
-			
 		
 		for i, bbq_infos in enumerate(bibinfo['solved_qs']):
 			# nos identifiants doivent être ici comme dans le formulaire
@@ -209,16 +226,19 @@ def www_eval_fo_post():
 	with open(out_doc, "w") as out:
 		out.write("\n".join(output_lines))
 	
+	
+	# debug:
+	# print("données brutes: %s" % request.form)
+	
 	return("""
 <html>
 	<body>
 		<h3>données bien enregistrées en tableau</h3>
 		<p>fichier: %s</p>
-		<xsmall>données: to_store dict: %s</xsmall>
 		<p>Retourner au <a href="/evaluation_docs">documents à traiter</a></p>
 	</body>
 </html>
-""" % (out_doc, request.form))
+""" % out_doc)
 
 
 # pour tester la template mère -----------
@@ -226,6 +246,10 @@ def www_eval_fo_post():
 @mon_app.route('/test_base')
 def www_ird():
 	return render_template('ird_base.html')
+
+@mon_app.route('/test_hyphe')
+def www_hyphe():
+	return render_template('hyphe.html')
 
 
 
